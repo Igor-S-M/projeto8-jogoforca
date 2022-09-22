@@ -1,5 +1,8 @@
-import ReactDom from "react-dom"
+import reactDom from "react-dom"
+import App from "./App"
+import "./styles/reset.css"
+import "./styles/style.css"
 
-alert("deu bom")
 
-ReactDOM.render(alert,document.querySelector(".root"))
+
+reactDom.render(<App/>,document.querySelector(".root"))

@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+
+.container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.upside{
+    display: flex;
+    background-color: lightblue;
+
+    position: relative;
+}
+
+.start-button{
+
+    width: 300px;
+    height: 80px;
+
+    background-color: green;
+    border-radius: 20px;
+    
+    color: white;
+    font-style: medium;
+    font-size:26px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+
+
+    position: absolute;
+    left:800px;
+    top: 40px;
+}
+
+.guessing{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+}
+
+.guess{
+    border-radius: 5px;
+    height: 30px;
+}
+
+.guess-button{
+    
+    width: 100px;
+    height: 30px;
+
+
+    background-color: lightblue;
+    color: blue;
+    font-size:18px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+}
+
