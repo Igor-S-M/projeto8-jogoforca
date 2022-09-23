@@ -10,20 +10,19 @@ import forca6 from "./image/forca6.png"
 
 export default function App() {
     return (
-        <div className="container">
-            <Upside></Upside>
-            <div className="keyboard">
-                <Teclas></Teclas>
-            </div>
-            <Guessing></Guessing>
-        </div>
+       <div className="hangman-game">
+            <Screen/>
+            <Keyboard/>
+            <Guess/>
+       </div>
     )
 }
 
 
-function Upside() {
+
+function Screen() {
     return (
-        <div className="upside">
+        <div className="screen">
             <Image />
             <StartButton />
         </div>
@@ -33,7 +32,7 @@ function Upside() {
 function Image() {
     return (
 
-        <img className="hangman-image" src={forca0} alt="imagem de forca" />
+        <img src={forca0} alt="imagem de forca" />
 
     )
 }
@@ -44,22 +43,25 @@ function StartButton() {
     )
 }
 
-function Teclas() {
+
+
+function Keyboard() {
 
     const alfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 
     return (
-        alfabeto.map((i) => <button className="letter">{i}</button>)
-
+        <div className="keyboard">
+            {alfabeto.map((i) => <button>{i.toUpperCase()}</button>)}
+        </div>
     )
 }
 
-function Guessing() {
+function Guess() {
     return (
-        <div className="guessing">
+        <div className="guess">
             <p>Já sei a palavra!</p>
-            <input className="guess"></input>
-            <button className="guess-button">chutar</button>
+            <input></input>
+            <button>chutar</button>
         </div>
     )
 }
