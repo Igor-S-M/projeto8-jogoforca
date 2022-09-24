@@ -12,8 +12,22 @@ import forca6 from "./image/forca6.png"
 
 export default function App() {
 
+    //chamada quando apertar o butao de escolher palavra
+    function start() {
+
+        setStartButtonSwitch("on")
+    
+    }
+
+    function checkLetter(i){
+
+    }
 
     
+    //estado do botao iniciar
+    const [startButtonSwitch, setStartButtonSwitch] = React.useState("off")
+    
+
     //botoes do alfabeto
     const alfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 
@@ -22,10 +36,10 @@ export default function App() {
             <div className="screen">
                 <img src={forca0} alt="imagem de forca" />
                 <button onClick={start}>Escolher Palavra</button>
-                <Word />
+                <Word switch={startButtonSwitch}></Word>
             </div>
             <div className="keyboard">
-                {alfabeto.map((i) => <button>{i.toUpperCase()}</button>)}
+                {alfabeto.map((i,idx) => <button key={idx} onClick={()=>(checkLetter(i))}>{i.toUpperCase()}</button>)}
             </div>
             <div className="guess">
                 <p>Já sei a palavra!</p>
@@ -39,22 +53,22 @@ export default function App() {
 
 
 
-let palavra = ""
+let palavraEscondida = ""
 let palavraCerta = ""
 
-function Word(flag) {
+function Word(porps) {
 
-    flag = true
-    if (flag === true) {
+    
+    if (porps.switch === "on") {
         palavraCerta = palavras[Math.floor(Math.random() * palavras.length)]
         for (let i in palavraCerta) {
-            palavra += "_ "
+            palavraEscondida += "_ "
         }
 
 
         return (
             <div className="word">
-                <p>{palavra}</p>
+                <p>{palavraEscondida}</p>
                 <p>{palavraCerta}</p>
             </div>
         )
@@ -65,9 +79,3 @@ function Word(flag) {
     }
 }
 
-function start() {
-
-    console.log("start foi acionado")
-    alert("start foi acionado")
-
-}
