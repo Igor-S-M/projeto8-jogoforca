@@ -4,6 +4,8 @@
     box-sizing: border-box;
 }
 
+
+
 .root{
     display: flex;
     justify-content: center;
@@ -33,7 +35,7 @@
     height: 350px;
 }
 
-.start-button{
+.screen button{
 
     width: 150px;
     height: 40px;
@@ -73,8 +75,6 @@
     font-size:14px;
     font-weight: 700;
     font-family: 'Roboto', sans-serif;
-
-
 }
 
 .guess{
@@ -107,3 +107,22 @@
     font-family: 'Roboto', sans-serif;
 }
 
+.word{
+    width: 140px;
+    height: 26px;
+    background-color: red;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size:18px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+
+    position: absolute;
+    bottom: 60px;
+    right: 100px;
+
+
+}
