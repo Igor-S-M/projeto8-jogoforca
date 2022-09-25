@@ -12,23 +12,36 @@ import forca6 from "./image/forca6.png"
 
 export default function App() {
 
+    //estado da palavra a ser adivinhada
+    const [rightAnswer, setRightAnswer] = React.useState("")
+
+    //estado da palavra a ser adivinhada sendo visualizada pelo usuario
+    const [showWord, setShowWord] = React.useState([])
+
+    //estado dos botoes de letras
+    const [letterButtonPressed, setLetterButtonPressed] = React.useState([])
+
+    //estado dos erros
+    const [wrongScore, setWrongScore] = React.useState(0)
+
+    //estado das imagens de forca
+    const [hangmanImage, setHangmanImage] = React.useState(forca0)
+
 
     function start() {
 
         console.log("start acionado")
 
+        setLetterButtonPressed([])
+        setWrongScore(0)
+        setHangmanImage(forca0)
         /*
         habilitar input e guessing
         */
-
         createWord()
+        setFimDeJogo(false)
 
     }
-
-    //estado da palavra a ser adivinhada
-    const [rightAnswer, setRightAnswer] = React.useState("")
-    //estado da palavra a ser adivinhada sendo visualizada pelo usuario
-    const [showWord, setShowWord] = React.useState("")
 
     //função para colocar as palavras
     function createWord() {
@@ -38,70 +51,61 @@ export default function App() {
         let answer = palavras[Math.floor(Math.random() * palavras.length)]
         setRightAnswer(answer)
 
-        let shoo = ""
-        for (let i = 0; i < answer.length; i++) {
-            shoo += "_ "
+
+        let shoo = []
+        for (let i in answer) {
+            shoo.push("_")
         }
 
         setShowWord(shoo)
+        console.log(answer)
     }
-
-
-
-    //estado dos botoes de letras
-    const [letterButtonPressed, setLetterButtonPressed] = React.useState([])
 
     // função chamada ao clicar em um letra
     function clickLetter(letter) {
 
-        console.log(`clickLetter(${letter}) acionado`)
+        if (rightAnswer !== "") {
+            setLetterButtonPressed([...letterButtonPressed, letter])
 
-        setLetterButtonPressed([...letterButtonPressed, letter])
-
-        //conferir se acertou a letra
-        checkLetter(letter)
+            //conferir se acertou a letra
+            checkLetter(letter)
+        }
     }
-
 
     function checkLetter(letter) {
         console.log(`checkLetter(${letter}) acionado`)
 
         if (rightAnswer.includes(letter)) {
-            console.log("acertou a letra")
             changeShowWord(letter)
 
         } else {
-            console.log("errou a letra")
             setWrongScore(wrongScore + 1)
             changeImage()
         }
 
     }
 
-    //estado dos erros
-    const [wrongScore, setWrongScore] = React.useState(0)
-
-    //estado das imagens de forca
-    const [hangmanImage, setHangmanImage] = React.useState(forca0)
 
     function changeImage() {
+        console.log("changeImage acionado")
 
         const forcaImage = [forca0, forca1, forca2, forca3, forca4, forca5, forca6]
         setHangmanImage(forcaImage[wrongScore + 1])
-        console.log(`estamos na imagem ${wrongScore + 1}`)
-        console.log("change iamge - esse é o numero de erros", wrongScore + 1)
+        console.log("perdeu", wrongScore + 1)
+
+        lose()
     }
 
 
-    function findRightIndexes(letter) {
+    function findIndexes(elemento, array) {
         //achando os indices da resposta certa que tem a letra
         let indexes = []
-        let idx = rightAnswer.indexOf(letter)
+        let idx = array.indexOf(elemento)
         while (idx !== -1) {
             indexes.push(idx)
-            idx = rightAnswer.indexOf(letter, idx + 1)
+            idx = array.indexOf(elemento, idx + 1)
         }
-        
+
         return indexes
 
     }
@@ -109,41 +113,41 @@ export default function App() {
     function changeShowWord(letter) {
         console.log(`changeShowWord(${letter}) foi acionada`)
 
-        let rightIndexes = findRightIndexes(letter)
-        console.log("os indices certos sao:" , rightIndexes)
+        let rightIndexes = findIndexes(letter, rightAnswer)
+        let showIndexes = findIndexes("_", showWord)
 
-        let shoo = ""
-        for (let i = 0; i < showWord.length; i++) {
+        let teste = showWord
 
-            //achar elementos que podem ser alterados
-            if (showWord[i] === " ") {
-                //conferir se os termos anterioes e posterioes sao _
-                shoo += " "
-                
+        for (let idx in showIndexes) {
+            if (rightIndexes.includes(showIndexes[idx])) {
+                teste[showIndexes[idx]] = rightAnswer[showIndexes[idx]]
             }
-
-            else if (showWord[i] === "_") {
-                //os que vao ser alterados
-                //ver os indices deles e comparar com indexes
-
-                if (rightIndexes.includes(i / 2)) {
-                    shoo += `${letter}`
-                    
-                } else {
-                    shoo += "_"
-                }
-
-            } else {
-                shoo += `${showWord[i]}`
-            }
-
         }
 
-
-        setShowWord(shoo)
+        setShowWord(teste)
+        win()
 
     }
 
+    const [fimDeJogo, setFimDeJogo] = React.useState(false)
+
+    function win() {
+        if (showWord.join("") === rightAnswer) {
+            alert("ganhou")
+            setShowWord(rightAnswer)
+            setLetterButtonPressed(alfabeto)
+            setFimDeJogo(true)
+        }
+    }
+
+    function lose() {
+        if (wrongScore + 1 > 5) {
+            alert("perdeu")
+            setShowWord(rightAnswer)
+            setLetterButtonPressed(alfabeto)
+            setFimDeJogo(true)
+        }
+    }
 
 
     //botoes do alfabeto
@@ -156,18 +160,13 @@ export default function App() {
                 <img src={hangmanImage} alt="imagem de forca" />
                 <button onClick={start}>Escolher Palavra</button>
                 <div>
-
-
                     <div className="word">
-                        <p>{showWord}</p>
-                        <p>{rightAnswer}</p>
+                        <p>{!fimDeJogo? showWord.join(" "):rightAnswer}</p>
                     </div>
-
-
                 </div>
             </div>
             <div className="keyboard">
-                {alfabeto.map((i, idx) => <button className={`${letterButtonPressed.includes(i) ? "clicado" : ""}`} key={idx} onClick={() => !letterButtonPressed.includes(i) ?(clickLetter(i)):""}>{i.toUpperCase()}</button>)}
+                {alfabeto.map((i, idx) => <button className={`${letterButtonPressed.includes(i) ? "clicado" : ""}`} key={idx} onClick={() => !letterButtonPressed.includes(i) ? (clickLetter(i)) : ""}>{i.toUpperCase()}</button>)}
             </div>
             <div className="guess">
                 <p>Já sei a palavra!</p>
