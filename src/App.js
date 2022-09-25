@@ -63,9 +63,6 @@ export default function App() {
     }
 
 
-    //estado dos erros
-    const [wrongScore, setWrongScore] = React.useState(0)
-
     function checkLetter(letter) {
         console.log(`checkLetter(${letter}) acionado`)
 
@@ -81,6 +78,9 @@ export default function App() {
 
     }
 
+    //estado dos erros
+    const [wrongScore, setWrongScore] = React.useState(0)
+
     //estado das imagens de forca
     const [hangmanImage, setHangmanImage] = React.useState(forca0)
 
@@ -92,9 +92,11 @@ export default function App() {
         console.log("change iamge - esse é o numero de erros", wrongScore+1)
     }
 
+
     function changeShowWord(letter) { 
         console.log(`changeShowWord(${letter}) foi acionada`)
 
+        //achando os indices da resposta certa que tem a letra
         let indexes = []
         let idx = rightAnswer.indexOf(letter)
         while(idx !== -1){
@@ -103,16 +105,30 @@ export default function App() {
         }
 
 
-
-
-        
         let shoo = ""
-        for (let i = 0; i < rightAnswer.length; i++) {
-            if(!indexes.includes(i)){
-            shoo += "_ "
-            }else{
-            shoo+= `${letter} `
+        for (let i = 0; i < showWord.length; i++) {
+
+            //achar elementos que podem ser alterados
+                       
+            if(showWord[i] === " "){
+                //conferir se os termos anterioes e posterioes sao _
+                shoo += " "
             }
+                       
+            else if(showWord[i] === "_"){
+                //os que vao ser alterados
+                //ver os indices deles e comparar com indexes
+
+                if(indexes.includes(i/2)){
+                    shoo += `${letter}`
+                }else{
+                    shoo+= "_"
+                }
+
+            }else{
+                shoo += `${showWord[i]}`
+            }
+
         }
 
         setShowWord(shoo)
