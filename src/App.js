@@ -167,7 +167,7 @@ export default function App() {
                 </div>
             </div>
             <div className="keyboard">
-                {alfabeto.map((i, idx) => <button className={`${letterButtonPressed.includes(i) ? "clicado" : ""}`} key={idx} onClick={() => (clickLetter(i))}>{i.toUpperCase()}</button>)}
+                {alfabeto.map((i, idx) => <button className={`${letterButtonPressed.includes(i) ? "clicado" : ""}`} key={idx} onClick={() => !letterButtonPressed.includes(i) ?(clickLetter(i)):""}>{i.toUpperCase()}</button>)}
             </div>
             <div className="guess">
                 <p>Já sei a palavra!</p>
