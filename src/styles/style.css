@@ -109,10 +109,11 @@
 
 .word{
     width: 140px;
-    height: 26px;
+    height: 46px;
     background-color: red;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 
