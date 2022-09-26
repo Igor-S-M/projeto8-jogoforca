@@ -129,7 +129,8 @@ export default function App() {
 
     }
 
-    const [fimDeJogo, setFimDeJogo] = React.useState(false)
+    const [fimDeJogo, setFimDeJogo] = React.useState(true)
+    const [ganhou, setGanhou] = React.useState(true)
 
     function win() {
         if (showWord.join("") === rightAnswer) {
@@ -137,6 +138,7 @@ export default function App() {
             setShowWord(rightAnswer)
             setLetterButtonPressed(alfabeto)
             setFimDeJogo(true)
+            setGanhou(true)
         }
     }
 
@@ -146,6 +148,7 @@ export default function App() {
             setShowWord(rightAnswer)
             setLetterButtonPressed(alfabeto)
             setFimDeJogo(true)
+            setGanhou(false)
         }
     }
 
@@ -160,7 +163,7 @@ export default function App() {
                 <img src={hangmanImage} alt="imagem de forca" />
                 <button onClick={start}>Escolher Palavra</button>
                 <div>
-                    <div className="word">
+                    <div className={`word ${fimDeJogo? (ganhou?"verde":"vermelho") :""}`}>
                         <p>{!fimDeJogo? showWord.join(" "):rightAnswer}</p>
                     </div>
                 </div>
