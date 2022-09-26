@@ -77,8 +77,14 @@
     font-family: 'Roboto', sans-serif;
 }
 
+.naoClicado{
+    background-color: lightsteelblue;
+    color:blue
+}
+
 .clicado {
-    background-color: red; 
+    background-color: gray; 
+    color:black
 }
 
 .guess{
