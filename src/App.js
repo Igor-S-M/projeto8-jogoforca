@@ -202,6 +202,7 @@ export default function App() {
                 <input
                     onChange={changeInput}
                     value = {textInput}
+                    disabled = {endGame?true:false}
                     placeholder="chuta ai!"
                 />
                 <button onClick={endGame? null :checkAnswer}>chutar</button>
