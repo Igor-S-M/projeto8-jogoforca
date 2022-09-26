@@ -112,16 +112,15 @@
 }
 
 .word{
-    width: 200px;
-    height: 26px;
-    background-color: pink;
+    width: 300px;
+    height: 46px;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
 
-    font-size:18px;
+    font-size:36px;
     font-weight: 500;
     font-family: 'Roboto', sans-serif;
 

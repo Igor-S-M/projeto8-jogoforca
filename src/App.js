@@ -21,36 +21,41 @@ export default function App() {
     //estado dos botoes de letras
     const [letterButtonPressed, setLetterButtonPressed] = React.useState([])
 
+    //estado do input
+    const [textInput, setTextInput] = React.useState("")
+
     //estado dos erros
     const [wrongScore, setWrongScore] = React.useState(0)
 
     //estado das imagens de forca
     const [hangmanImage, setHangmanImage] = React.useState(forca0)
 
+    // estado para saber se o jogo acabou ou nao
+    const [endGame, setEndGame] = React.useState(true)
+
+    //estao para saber se o user ganhou ou perdeu
+    const [ganhou, setGanhou] = React.useState(true)
 
     function start() {
-
-        console.log("start acionado")
 
         setLetterButtonPressed([])
         setWrongScore(0)
         setHangmanImage(forca0)
+        setEndGame(false)
+        setTextInput("")
+
         /*
         habilitar input e guessing
         */
-        createWord()
-        setFimDeJogo(false)
 
+        createWord()
     }
 
-    //função para colocar as palavras
-    function createWord() {
 
-        console.log("createWord acionado")
+    function createWord() {
 
         let answer = palavras[Math.floor(Math.random() * palavras.length)]
         setRightAnswer(answer)
-
 
         let shoo = []
         for (let i in answer) {
@@ -58,43 +63,17 @@ export default function App() {
         }
 
         setShowWord(shoo)
+        
+        //teste
         console.log(answer)
     }
 
-    // função chamada ao clicar em um letra
     function clickLetter(letter) {
 
         if (rightAnswer !== "") {
             setLetterButtonPressed([...letterButtonPressed, letter])
-
-            //conferir se acertou a letra
             checkLetter(letter)
         }
-    }
-
-    function checkLetter(letter) {
-        console.log(`checkLetter(${letter}) acionado`)
-        let rightAnswerTest = changeElements(rightAnswer)
-
-        if (rightAnswerTest.includes(letter)) {
-            changeShowWord(letter)
-
-        } else {
-            setWrongScore(wrongScore + 1)
-            changeImage()
-        }
-
-    }
-
-
-    function changeImage() {
-        console.log("changeImage acionado")
-
-        const forcaImage = [forca0, forca1, forca2, forca3, forca4, forca5, forca6]
-        setHangmanImage(forcaImage[wrongScore + 1])
-        console.log("perdeu", wrongScore + 1)
-
-        lose()
     }
 
     function changeElements(palavra) {
@@ -118,30 +97,46 @@ export default function App() {
                 changedWord += letra
             }
         }
-
         return changedWord
+    }
+
+    function checkLetter(letter) {
+        let rightAnswerTest = changeElements(rightAnswer)
+
+        if (rightAnswerTest.includes(letter)) {
+            changeShowWord(letter)
+
+        } else {
+            setWrongScore(wrongScore + 1)
+            changeImage()
+        }
 
     }
 
+    function changeImage() {
 
-    function findIndexes(elemento, array) {
+        const forcaImage = [forca0, forca1, forca2, forca3, forca4, forca5, forca6]
+        setHangmanImage(forcaImage[wrongScore + 1])
+
+        if (wrongScore + 1 > 5) {
+            lose()
+        }
+    }
+
+    function findIndexes(element, array) {
         //achando os indices da resposta certa que tem a letra
         let indexes = []
-        let idx = array.indexOf(elemento)
+        let idx = array.indexOf(element)
         while (idx !== -1) {
             indexes.push(idx)
-            idx = array.indexOf(elemento, idx + 1)
+            idx = array.indexOf(element, idx + 1)
         }
-
         return indexes
-
     }
 
     function changeShowWord(letter) {
-        console.log(`changeShowWord(${letter}) foi acionada`)
 
         let rightAnswerTest = changeElements(rightAnswer)
-
         let rightIndexes = findIndexes(letter, rightAnswerTest)
         let showIndexes = findIndexes("_", showWord)
 
@@ -154,37 +149,39 @@ export default function App() {
         }
 
         setShowWord(teste)
-        win()
 
+        if (showWord.join("") === rightAnswer) {
+            win()
+        }
     }
 
-    const [fimDeJogo, setFimDeJogo] = React.useState(true)
-    const [ganhou, setGanhou] = React.useState(true)
+    function changeInput(event) {
+        setTextInput(event.target.value)
+    }
+
+    function checkAnswer() {
+        let rightAnswerTest = changeElements(rightAnswer)
+
+        textInput === rightAnswerTest ? win() : lose()
+    }
 
     function win() {
-        if (showWord.join("") === rightAnswer) {
-            alert("ganhou")
-            setShowWord(rightAnswer)
-            setLetterButtonPressed(alfabeto)
-            setFimDeJogo(true)
-            setGanhou(true)
-        }
+        setShowWord(rightAnswer)
+        setLetterButtonPressed(alfabeto)
+        setEndGame(true)
+        setGanhou(true)
     }
 
     function lose() {
-        if (wrongScore + 1 > 5) {
-            alert("perdeu")
-            setShowWord(rightAnswer)
-            setLetterButtonPressed(alfabeto)
-            setFimDeJogo(true)
-            setGanhou(false)
-        }
-    }
+        setShowWord(rightAnswer)
+        setLetterButtonPressed(alfabeto)
+        setEndGame(true)
+        setGanhou(false)
 
+    }
 
     //botoes do alfabeto
     const alfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-
 
     return (
         <div className="hangman-game">
@@ -192,18 +189,22 @@ export default function App() {
                 <img src={hangmanImage} alt="imagem de forca" />
                 <button onClick={start}>Escolher Palavra</button>
                 <div>
-                    <div className={`word ${fimDeJogo ? (ganhou ? "verde" : "vermelho") : ""}`}>
-                        <p>{!fimDeJogo ? showWord.join(" ") : rightAnswer}</p>
+                    <div className={`word ${endGame ? (ganhou ? "verde" : "vermelho") : ""}`}>
+                        <p>{!endGame ? showWord.join(" ") : rightAnswer}</p>
                     </div>
                 </div>
             </div>
             <div className="keyboard">
-                {alfabeto.map((i, idx) => <button className={`${letterButtonPressed.includes(i) ? "clicado" : ""}`} key={idx} onClick={() => !letterButtonPressed.includes(i) ? (clickLetter(i)) : ""}>{i.toUpperCase()}</button>)}
+                {alfabeto.map((i, idx) => <button className={`${letterButtonPressed.includes(i) ? "clicado" : ""}`} key={idx} onClick={() => !letterButtonPressed.includes(i) ? (clickLetter(i)) : null}>{i.toUpperCase()}</button>)}
             </div>
             <div className="guess">
                 <p>Já sei a palavra!</p>
-                <input></input>
-                <button>chutar</button>
+                <input
+                    onChange={changeInput}
+                    value = {textInput}
+                    placeholder="chuta ai!"
+                />
+                <button onClick={endGame? null :checkAnswer}>chutar</button>
             </div>
         </div>
     )
