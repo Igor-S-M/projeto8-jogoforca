@@ -74,8 +74,9 @@ export default function App() {
 
     function checkLetter(letter) {
         console.log(`checkLetter(${letter}) acionado`)
+        let rightAnswerTest = changeElements(rightAnswer)
 
-        if (rightAnswer.includes(letter)) {
+        if (rightAnswerTest.includes(letter)) {
             changeShowWord(letter)
 
         } else {
@@ -96,6 +97,32 @@ export default function App() {
         lose()
     }
 
+    function changeElements(palavra) {
+
+        let changedWord = ""
+
+        for (let letra of palavra) {
+            if (letra === "a" || letra === "á" || letra === "à" || letra === "â" || letra === "ã") {
+                changedWord += "a"
+            } else if (letra === "e" || letra === "é" || letra === "ê") {
+                changedWord += "e"
+            } else if (letra === "i" || letra === "í") {
+                changedWord += "i"
+            } else if (letra === "o" || letra === "ó" || letra === "ô" || letra === "õ") {
+                changedWord += "o"
+            } else if (letra === "u" || letra === "ú") {
+                changedWord += "u"
+            } else if (letra === "c" || letra === "ç") {
+                changedWord += "c"
+            } else {
+                changedWord += letra
+            }
+        }
+
+        return changedWord
+
+    }
+
 
     function findIndexes(elemento, array) {
         //achando os indices da resposta certa que tem a letra
@@ -113,7 +140,9 @@ export default function App() {
     function changeShowWord(letter) {
         console.log(`changeShowWord(${letter}) foi acionada`)
 
-        let rightIndexes = findIndexes(letter, rightAnswer)
+        let rightAnswerTest = changeElements(rightAnswer)
+
+        let rightIndexes = findIndexes(letter, rightAnswerTest)
         let showIndexes = findIndexes("_", showWord)
 
         let teste = showWord
@@ -163,8 +192,8 @@ export default function App() {
                 <img src={hangmanImage} alt="imagem de forca" />
                 <button onClick={start}>Escolher Palavra</button>
                 <div>
-                    <div className={`word ${fimDeJogo? (ganhou?"verde":"vermelho") :""}`}>
-                        <p>{!fimDeJogo? showWord.join(" "):rightAnswer}</p>
+                    <div className={`word ${fimDeJogo ? (ganhou ? "verde" : "vermelho") : ""}`}>
+                        <p>{!fimDeJogo ? showWord.join(" ") : rightAnswer}</p>
                     </div>
                 </div>
             </div>
