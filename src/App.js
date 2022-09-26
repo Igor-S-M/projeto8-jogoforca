@@ -177,6 +177,7 @@ export default function App() {
         setLetterButtonPressed(alfabeto)
         setEndGame(true)
         setGanhou(false)
+        setHangmanImage(forca6)
 
     }
 
